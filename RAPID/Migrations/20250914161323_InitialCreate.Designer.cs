@@ -12,7 +12,7 @@ using RAPID.Models;
 namespace RAPID.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250914105226_InitialCreate")]
+    [Migration("20250914161323_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -137,9 +137,6 @@ namespace RAPID.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DocumentId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("Drafted")
                         .HasColumnType("datetime2");
 
@@ -220,8 +217,6 @@ namespace RAPID.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.HasIndex("DocumentId");
-
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("PaymentModeId");
@@ -274,12 +269,58 @@ namespace RAPID.Migrations
                     b.Property<DateTime?>("IssueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("ReferenceTypeId")
+                        .HasColumnType("tinyint");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReferenceTypeId");
+
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("RAPID.Models.DocumentReferenceType", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Drafted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DocumentReferenceType");
                 });
 
             modelBuilder.Entity("RAPID.Models.Language", b =>
@@ -412,9 +453,6 @@ namespace RAPID.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DocumentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -448,8 +486,6 @@ namespace RAPID.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocumentId");
-
                     b.ToTable("Suppliers");
                 });
 
@@ -462,10 +498,6 @@ namespace RAPID.Migrations
                     b.HasOne("RAPID.Models.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId");
-
-                    b.HasOne("RAPID.Models.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId");
 
                     b.HasOne("RAPID.Models.Language", "Language")
                         .WithMany()
@@ -483,8 +515,6 @@ namespace RAPID.Migrations
 
                     b.Navigation("Currency");
 
-                    b.Navigation("Document");
-
                     b.Navigation("Language");
 
                     b.Navigation("PaymentMode");
@@ -492,13 +522,15 @@ namespace RAPID.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("RAPID.Models.Supplier", b =>
+            modelBuilder.Entity("RAPID.Models.Document", b =>
                 {
-                    b.HasOne("RAPID.Models.Document", "Document")
+                    b.HasOne("RAPID.Models.DocumentReferenceType", "ReferenceType")
                         .WithMany()
-                        .HasForeignKey("DocumentId");
+                        .HasForeignKey("ReferenceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Document");
+                    b.Navigation("ReferenceType");
                 });
 #pragma warning restore 612, 618
         }

@@ -40,6 +40,4 @@ public class Customer : CommonProperty
     public decimal OpeningBalance { get; set; } = 0m;
     public string CustomerLogoPath { get; set; }
 
-    public int? DocumentId { get; set; }//FK
-    public Document Document { get; set; }//Navigation
 }

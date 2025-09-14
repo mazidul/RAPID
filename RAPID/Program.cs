@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RAPID.Automapper;
 using RAPID.Models;
+using RAPID.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(CustomerMapper));
 
 // Service
-
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 // Add services to the container.
 

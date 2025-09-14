@@ -52,15 +52,10 @@ namespace RAPID.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Documents",
+                name: "DocumentReferenceType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Id = table.Column<byte>(type: "tinyint", nullable: false),
                     IsDefault = table.Column<bool>(type: "bit", nullable: false),
                     IsDraft = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -68,11 +63,12 @@ namespace RAPID.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Drafted = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Deleted = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Deleted = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Documents", x => x.Id);
+                    table.PrimaryKey("PK_DocumentReferenceType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,17 +146,43 @@ namespace RAPID.Migrations
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OpeningBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DocumentId = table.Column<int>(type: "int", nullable: true)
+                    OpeningBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Suppliers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReferenceId = table.Column<int>(type: "int", nullable: false),
+                    ReferenceTypeId = table.Column<byte>(type: "tinyint", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    IsDraft = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Drafted = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Deleted = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Suppliers_Documents_DocumentId",
-                        column: x => x.DocumentId,
-                        principalTable: "Documents",
-                        principalColumn: "Id");
+                        name: "FK_Documents_DocumentReferenceType_ReferenceTypeId",
+                        column: x => x.ReferenceTypeId,
+                        principalTable: "DocumentReferenceType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,7 +212,6 @@ namespace RAPID.Migrations
                     LocationUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OpeningBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CustomerLogoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentId = table.Column<int>(type: "int", nullable: true),
                     IsDefault = table.Column<bool>(type: "bit", nullable: false),
                     IsDraft = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -212,11 +233,6 @@ namespace RAPID.Migrations
                         name: "FK_Customers_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Customers_Documents_DocumentId",
-                        column: x => x.DocumentId,
-                        principalTable: "Documents",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Customers_Languagees_LanguageId",
@@ -246,11 +262,6 @@ namespace RAPID.Migrations
                 column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_DocumentId",
-                table: "Customers",
-                column: "DocumentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Customers_LanguageId",
                 table: "Customers",
                 column: "LanguageId");
@@ -266,9 +277,9 @@ namespace RAPID.Migrations
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Suppliers_DocumentId",
-                table: "Suppliers",
-                column: "DocumentId");
+                name: "IX_Documents_ReferenceTypeId",
+                table: "Documents",
+                column: "ReferenceTypeId");
         }
 
         /// <inheritdoc />
@@ -276,6 +287,9 @@ namespace RAPID.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Documents");
 
             migrationBuilder.DropTable(
                 name: "Suppliers");
@@ -296,7 +310,7 @@ namespace RAPID.Migrations
                 name: "State");
 
             migrationBuilder.DropTable(
-                name: "Documents");
+                name: "DocumentReferenceType");
         }
     }
 }

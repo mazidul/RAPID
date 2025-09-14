@@ -1,6 +1,6 @@
-﻿namespace RAPID.Models;
+﻿namespace RAPID.DTOs.Customer;
 
-public class Supplier
+public class SupplierDTO
 {
     public int Id { get; set; }
     public string SupplierName { get; set; }
@@ -14,4 +14,5 @@ public class Supplier
     public string PostCode { get; set; }
     public decimal OpeningBalance { get; set; } = 0m;
 
+    public List<DocumentDTO> Documents { get; set; } = new();
 }

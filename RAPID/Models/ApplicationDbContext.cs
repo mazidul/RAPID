@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RAPID.Models;
 
 namespace RAPID.Models;
 
@@ -15,5 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Language> Languagees { get; set; }
     public DbSet<State> State { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
+
+public DbSet<RAPID.Models.Country> Country { get; set; } = default!;
     //>>>>>>>>>>>>>End of customer <<<<<<<<<<<<<<
 }

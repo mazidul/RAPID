@@ -9,6 +9,6 @@ public class CustomerMapper: Profile
     public CustomerMapper()
     {
         CreateMap<Customer, CustomerDTO>().ReverseMap();
-        CreateMap<CustomerDocument, CustomerDocumentDTO>().ReverseMap();
+        CreateMap<Document, DocumentDTO>().ReverseMap();
     }
 }

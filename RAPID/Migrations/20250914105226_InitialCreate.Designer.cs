@@ -12,7 +12,7 @@ using RAPID.Models;
 namespace RAPID.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250913160053_InitialCreate")]
+    [Migration("20250914105226_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -137,6 +137,9 @@ namespace RAPID.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DocumentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Drafted")
                         .HasColumnType("datetime2");
 
@@ -217,6 +220,8 @@ namespace RAPID.Migrations
 
                     b.HasIndex("CurrencyId");
 
+                    b.HasIndex("DocumentId");
+
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("PaymentModeId");
@@ -226,7 +231,7 @@ namespace RAPID.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("RAPID.Models.CustomerDocument", b =>
+            modelBuilder.Entity("RAPID.Models.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -236,9 +241,6 @@ namespace RAPID.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
@@ -277,9 +279,7 @@ namespace RAPID.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CustomerDocuments");
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("RAPID.Models.Language", b =>
@@ -396,6 +396,63 @@ namespace RAPID.Migrations
                     b.ToTable("State");
                 });
 
+            modelBuilder.Entity("RAPID.Models.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("OpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VatNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("Suppliers");
+                });
+
             modelBuilder.Entity("RAPID.Models.Customer", b =>
                 {
                     b.HasOne("RAPID.Models.Country", "Country")
@@ -405,6 +462,10 @@ namespace RAPID.Migrations
                     b.HasOne("RAPID.Models.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId");
+
+                    b.HasOne("RAPID.Models.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId");
 
                     b.HasOne("RAPID.Models.Language", "Language")
                         .WithMany()
@@ -422,6 +483,8 @@ namespace RAPID.Migrations
 
                     b.Navigation("Currency");
 
+                    b.Navigation("Document");
+
                     b.Navigation("Language");
 
                     b.Navigation("PaymentMode");
@@ -429,20 +492,13 @@ namespace RAPID.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("RAPID.Models.CustomerDocument", b =>
+            modelBuilder.Entity("RAPID.Models.Supplier", b =>
                 {
-                    b.HasOne("RAPID.Models.Customer", "Customer")
-                        .WithMany("Documents")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("RAPID.Models.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId");
 
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("RAPID.Models.Customer", b =>
-                {
-                    b.Navigation("Documents");
+                    b.Navigation("Document");
                 });
 #pragma warning restore 612, 618
         }

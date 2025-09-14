@@ -39,5 +39,7 @@ public class Customer : CommonProperty
     public string LocationUrl { get; set; }
     public decimal OpeningBalance { get; set; } = 0m;
     public string CustomerLogoPath { get; set; }
-    public ICollection<CustomerDocument> Documents { get; set; } = new List<CustomerDocument>();
+
+    public int? DocumentId { get; set; }//FK
+    public Document Document { get; set; }//Navigation
 }

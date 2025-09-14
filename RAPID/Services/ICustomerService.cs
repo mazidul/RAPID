@@ -1,13 +1,12 @@
 ﻿using RAPID.DTOs.Customer;
 
-namespace RAPID.Services
+namespace RAPID.Services;
+
+public interface ICustomerService
 {
-    public interface ICustomerService
-    {
-        Task<CustomerDTO> GetByIdAsync(int id);
-        Task<IEnumerable<CustomerDTO>> GetAllAsync();
-        Task<CustomerDTO> CreateAsync(CustomerDTO dto);
-        Task<CustomerDTO> UpdateAsync(int id, CustomerDTO dto);
-        Task<bool> DeleteAsync(int id);
-    }
+    Task<IEnumerable<CustomerDTO>> GetAllAsync();
+    Task<CustomerDTO?> GetByIdAsync(int id);
+    Task<CustomerDTO> AddAsync(CustomerDTO dto);
+    Task<CustomerDTO?> UpdateAsync(CustomerDTO dto);
+    Task<bool> DeleteAsync(int id);
 }

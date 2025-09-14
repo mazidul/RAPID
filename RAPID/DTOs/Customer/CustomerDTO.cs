@@ -26,6 +26,6 @@
         public string CustomerLogoPath { get; set; }
 
         // Nested Documents
-        public List<CustomerDocumentDTO> Documents { get; set; } = new();
+        public List<DocumentDTO> Documents { get; set; } = new();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace RAPID.DTOs.Customer
 {
-    public class CustomerDocumentDTO
+    public class DocumentDTO
     {
         public int Id { get; set; }
         public string FileName { get; set; }

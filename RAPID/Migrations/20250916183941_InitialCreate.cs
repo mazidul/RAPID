@@ -12,7 +12,7 @@ namespace RAPID.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Country",
+                name: "Countries",
                 columns: table => new
                 {
                     Id = table.Column<byte>(type: "tinyint", nullable: false),
@@ -28,7 +28,7 @@ namespace RAPID.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Country", x => x.Id);
+                    table.PrimaryKey("PK_Countries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +112,7 @@ namespace RAPID.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "State",
+                name: "States",
                 columns: table => new
                 {
                     Id = table.Column<byte>(type: "tinyint", nullable: false),
@@ -128,7 +128,7 @@ namespace RAPID.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_State", x => x.Id);
+                    table.PrimaryKey("PK_States", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,6 +186,63 @@ namespace RAPID.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaxNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CurrencyId = table.Column<byte>(type: "tinyint", nullable: true),
+                    CountryId = table.Column<byte>(type: "tinyint", nullable: true),
+                    StateId = table.Column<byte>(type: "tinyint", nullable: true),
+                    LanguageId = table.Column<byte>(type: "tinyint", nullable: true),
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BankAccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IBAN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fax = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timezone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateFormat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyLogoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FaviconPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OvertimeRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EnableRounding = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Companies_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Companies_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Companies_Languagees_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languagees",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Companies_States_StateId",
+                        column: x => x.StateId,
+                        principalTable: "States",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -225,9 +282,9 @@ namespace RAPID.Migrations
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_Country_CountryId",
+                        name: "FK_Customers_Countries_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "Country",
+                        principalTable: "Countries",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Customers_Currencies_CurrencyId",
@@ -245,11 +302,31 @@ namespace RAPID.Migrations
                         principalTable: "PaymentModes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Customers_State_StateId",
+                        name: "FK_Customers_States_StateId",
                         column: x => x.StateId,
-                        principalTable: "State",
+                        principalTable: "States",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_CountryId",
+                table: "Companies",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_CurrencyId",
+                table: "Companies",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_LanguageId",
+                table: "Companies",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_StateId",
+                table: "Companies",
+                column: "StateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_CountryId",
@@ -286,6 +363,9 @@ namespace RAPID.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Companies");
+
+            migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
@@ -295,7 +375,7 @@ namespace RAPID.Migrations
                 name: "Suppliers");
 
             migrationBuilder.DropTable(
-                name: "Country");
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "Currencies");
@@ -307,7 +387,7 @@ namespace RAPID.Migrations
                 name: "PaymentModes");
 
             migrationBuilder.DropTable(
-                name: "State");
+                name: "States");
 
             migrationBuilder.DropTable(
                 name: "DocumentReferenceType");

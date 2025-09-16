@@ -14,9 +14,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<PaymentMode> PaymentModes { get; set; }
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Language> Languagees { get; set; }
-    public DbSet<State> State { get; set; }
-    public DbSet<Supplier> Suppliers { get; set; }
-
-public DbSet<RAPID.Models.Country> Country { get; set; } = default!;
-    //>>>>>>>>>>>>>End of customer <<<<<<<<<<<<<<
+    public DbSet<State> States { get; set; }
+    public DbSet<Supplier> Suppliers { get; set; }    
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<Company> Companies { get; set; }
 }

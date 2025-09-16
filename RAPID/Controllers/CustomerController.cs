@@ -16,9 +16,9 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<CustomerDTO>>> GetAll()
+    public async Task<ActionResult<List<CustomerDTO>>> GetAll(int? pageNumber = null, int? pageSize = null)
     {
-        return Ok(await _customerService.GetAllAsync());
+        return Ok(await _customerService.GetAllAsync(pageNumber, pageSize));
     }
 
     [HttpGet("{id}")]

@@ -15,14 +15,26 @@ public class CustomerService : ICustomerService
         _context = context;
     }
 
-    // Get All Customers
-    public async Task<List<CustomerDTO>> GetAllAsync()
+    public async Task<List<CustomerDTO>> GetAllAsync(int? pageNumber = null, int? pageSize = null)
     {
-        var customers = await _context.Customers.ToListAsync();
+
+        var query = _context.Customers.AsQueryable();
+
+
+        if (pageNumber.HasValue && pageSize.HasValue)
+        {
+            int skip = (pageNumber.Value - 1) * pageSize.Value;
+            query = query.Skip(skip).Take(pageSize.Value);
+        }
+
+        // Get paginated customers
+        var customers = await query.ToListAsync();
 
         var result = new List<CustomerDTO>();
+
         foreach (var c in customers)
         {
+            // Fetch documents for each customer
             var documents = await _context.Documents
                 .Where(d => d.ReferenceId == c.Id && d.ReferenceTypeId == CustomerReferenceTypeId)
                 .Select(d => new DocumentDTO
@@ -67,7 +79,6 @@ public class CustomerService : ICustomerService
         return result;
     }
 
-    // Get Customer by Id
     public async Task<CustomerDTO?> GetByIdAsync(int id)
     {
         var customer = await _context.Customers.FindAsync(id);
@@ -114,10 +125,9 @@ public class CustomerService : ICustomerService
         };
     }
 
-    // Create Customer
     public async Task<CustomerDTO> CreateAsync(CustomerDTO dto)
     {
-        //using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             var customer = new Customer
@@ -146,9 +156,8 @@ public class CustomerService : ICustomerService
             };
 
             _context.Customers.Add(customer);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            // Insert documents
             foreach (var d in dto.Documents)
             {
                 var doc = new Document
@@ -164,28 +173,25 @@ public class CustomerService : ICustomerService
             }
 
             await _context.SaveChangesAsync();
-            //await transaction.CommitAsync();
+            await transaction.CommitAsync();
 
             dto.Id = customer.Id;
             return dto;
         }
         catch
         {
-            //await transaction.RollbackAsync();
+            await transaction.RollbackAsync();
             throw;
         }
     }
 
-    // Update Customer
     public async Task<CustomerDTO?> UpdateAsync(int id, CustomerDTO dto)
     {
         var customer = await _context.Customers.FindAsync(id);
         if (customer == null) return null;
 
-        // Update customer fields
         _context.Entry(customer).CurrentValues.SetValues(dto);
 
-        // Handle Documents
         var existingDocs = await _context.Documents
             .Where(d => d.ReferenceId == id && d.ReferenceTypeId == 0)
             .ToListAsync();
@@ -194,7 +200,6 @@ public class CustomerService : ICustomerService
         {
             if (docDto.Id == 0)
             {
-                // New document
                 _context.Documents.Add(new Document
                 {
                     ReferenceId = id,
@@ -207,7 +212,6 @@ public class CustomerService : ICustomerService
             }
             else
             {
-                // Update existing
                 var existingDoc = existingDocs.FirstOrDefault(d => d.Id == docDto.Id);
                 if (existingDoc != null)
                 {
@@ -216,7 +220,6 @@ public class CustomerService : ICustomerService
             }
         }
 
-        // Remove deleted documents
         var docIds = dto.Documents.Where(d => d.Id != 0).Select(d => d.Id).ToList();
         var toDelete = existingDocs.Where(d => !docIds.Contains(d.Id)).ToList();
         if (toDelete.Any()) _context.Documents.RemoveRange(toDelete);
@@ -225,10 +228,6 @@ public class CustomerService : ICustomerService
         return dto;
     }
 
-
-
-
-    // Delete Customer
     public async Task<bool> DeleteAsync(int id)
     {
         //using var transaction = await _context.Database.BeginTransactionAsync();

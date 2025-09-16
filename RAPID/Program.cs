@@ -16,6 +16,7 @@ builder.Services.AddAutoMapper(typeof(CustomerMapper));
 // Service
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ITableCountService, TableCountService>();
 
 // Add services to the container.
 

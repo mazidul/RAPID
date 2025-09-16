@@ -38,9 +38,7 @@ public class TableCountService : ITableCountService
         var inactive = await dbSet.CountAsync(e => EF.Property<bool>(e, "IsActive") == false);
         var draft = await dbSet.CountAsync(e => EF.Property<bool>(e, "IsDraft") == true);
         var updated = await dbSet.CountAsync(e => EF.Property<DateTime?>(e, "UpdatedAt") != null);
-        var deleted = await dbSet.CountAsync(e =>
-            EF.Property<bool>(e, "IsDelete") == true ||
-            EF.Property<DateTime?>(e, "Deleted") != null);
+        var deleted = await dbSet.CountAsync(e => EF.Property<bool>(e, "IsDelete") == true);
 
         return new TableCountDto
         {

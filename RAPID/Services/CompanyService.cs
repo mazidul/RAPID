@@ -22,6 +22,7 @@ namespace RAPID.Services
                     Code = c.Code,
                     Name = c.Name,
                     TaxNumber = c.TaxNumber,
+                    ClientId = c.ClientId,
                     CurrencyId = c.CurrencyId,
                     CountryId = c.CountryId,
                     StateId = c.StateId,
@@ -48,7 +49,7 @@ namespace RAPID.Services
                 .ToListAsync();
         }
 
-        public async Task<CompanyDTO> GetByIdAsync(int id)
+        public async Task<CompanyDTO?> GetByIdAsync(int id)
         {
             var c = await _context.Companies.FindAsync(id);
             if (c == null) return null;
@@ -59,6 +60,7 @@ namespace RAPID.Services
                 Code = c.Code,
                 Name = c.Name,
                 TaxNumber = c.TaxNumber,
+                ClientId = c.ClientId,
                 CurrencyId = c.CurrencyId,
                 CountryId = c.CountryId,
                 StateId = c.StateId,
@@ -86,11 +88,12 @@ namespace RAPID.Services
 
         public async Task<CompanyDTO> CreateAsync(CompanyDTO dto)
         {
-            var entity = new Company
+            var company = new Company
             {
                 Code = dto.Code,
                 Name = dto.Name,
                 TaxNumber = dto.TaxNumber,
+                ClientId = dto.ClientId,
                 CurrencyId = dto.CurrencyId,
                 CountryId = dto.CountryId,
                 StateId = dto.StateId,
@@ -115,43 +118,44 @@ namespace RAPID.Services
                 EnableRounding = dto.EnableRounding
             };
 
-            _context.Companies.Add(entity);
+            _context.Companies.Add(company);
             await _context.SaveChangesAsync();
 
-            dto.Id = entity.Id;
+            dto.Id = company.Id;
             return dto;
         }
 
-        public async Task<CompanyDTO> UpdateAsync(int id, CompanyDTO dto)
+        public async Task<CompanyDTO?> UpdateAsync(int id, CompanyDTO dto)
         {
-            var entity = await _context.Companies.FindAsync(id);
-            if (entity == null) return null;
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null) return null;
 
-            entity.Code = dto.Code;
-            entity.Name = dto.Name;
-            entity.TaxNumber = dto.TaxNumber;
-            entity.CurrencyId = dto.CurrencyId;
-            entity.CountryId = dto.CountryId;
-            entity.StateId = dto.StateId;
-            entity.LanguageId = dto.LanguageId;
-            entity.BankName = dto.BankName;
-            entity.BankAccountName = dto.BankAccountName;
-            entity.BankAccountNumber = dto.BankAccountNumber;
-            entity.IBAN = dto.IBAN;
-            entity.Phone = dto.Phone;
-            entity.Fax = dto.Fax;
-            entity.Mobile = dto.Mobile;
-            entity.Email = dto.Email;
-            entity.Website = dto.Website;
-            entity.City = dto.City;
-            entity.PostCode = dto.PostCode;
-            entity.Address = dto.Address;
-            entity.Timezone = dto.Timezone;
-            entity.DateFormat = dto.DateFormat;
-            entity.CompanyLogoPath = dto.CompanyLogoPath;
-            entity.FaviconPath = dto.FaviconPath;
-            entity.OvertimeRate = dto.OvertimeRate;
-            entity.EnableRounding = dto.EnableRounding;
+            company.Code = dto.Code;
+            company.Name = dto.Name;
+            company.TaxNumber = dto.TaxNumber;
+            company.ClientId = dto.ClientId;
+            company.CurrencyId = dto.CurrencyId;
+            company.CountryId = dto.CountryId;
+            company.StateId = dto.StateId;
+            company.LanguageId = dto.LanguageId;
+            company.BankName = dto.BankName;
+            company.BankAccountName = dto.BankAccountName;
+            company.BankAccountNumber = dto.BankAccountNumber;
+            company.IBAN = dto.IBAN;
+            company.Phone = dto.Phone;
+            company.Fax = dto.Fax;
+            company.Mobile = dto.Mobile;
+            company.Email = dto.Email;
+            company.Website = dto.Website;
+            company.City = dto.City;
+            company.PostCode = dto.PostCode;
+            company.Address = dto.Address;
+            company.Timezone = dto.Timezone;
+            company.DateFormat = dto.DateFormat;
+            company.CompanyLogoPath = dto.CompanyLogoPath;
+            company.FaviconPath = dto.FaviconPath;
+            company.OvertimeRate = dto.OvertimeRate;
+            company.EnableRounding = dto.EnableRounding;
 
             await _context.SaveChangesAsync();
 
@@ -160,10 +164,10 @@ namespace RAPID.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var entity = await _context.Companies.FindAsync(id);
-            if (entity == null) return false;
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null) return false;
 
-            _context.Companies.Remove(entity);
+            _context.Companies.Remove(company);
             await _context.SaveChangesAsync();
             return true;
         }

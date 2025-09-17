@@ -7,39 +7,39 @@ namespace RAPID.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class ClientController : ControllerBase
     {
-        private readonly ICompanyService _service;
+        private readonly IClientService _service;
 
-        public CompanyController(ICompanyService service)
+        public ClientController(IClientService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAll()
         {
-            var companies = await _service.GetAllAsync();
-            return Ok(companies);
+            var clients = await _service.GetAllAsync();
+            return Ok(clients);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyDTO>> GetById(int id)
+        public async Task<ActionResult<ClientDTO>> GetById(int id)
         {
-            var company = await _service.GetByIdAsync(id);
-            if (company == null) return NotFound();
-            return Ok(company);
+            var client = await _service.GetByIdAsync(id);
+            if (client == null) return NotFound();
+            return Ok(client);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CompanyDTO>> Create(CompanyDTO dto)
+        public async Task<ActionResult<ClientDTO>> Create(ClientDTO dto)
         {
             var created = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CompanyDTO>> Update(int id, CompanyDTO dto)
+        public async Task<ActionResult<ClientDTO>> Update(int id, ClientDTO dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
             if (updated == null) return NotFound();

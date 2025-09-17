@@ -7,39 +7,39 @@ namespace RAPID.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class BranchController : ControllerBase
     {
-        private readonly ICompanyService _service;
+        private readonly IBranchService _service;
 
-        public CompanyController(ICompanyService service)
+        public BranchController(IBranchService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompanyDTO>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var companies = await _service.GetAllAsync();
-            return Ok(companies);
+            var branches = await _service.GetAllAsync();
+            return Ok(branches);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CompanyDTO>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var company = await _service.GetByIdAsync(id);
-            if (company == null) return NotFound();
-            return Ok(company);
+            var branch = await _service.GetByIdAsync(id);
+            if (branch == null) return NotFound();
+            return Ok(branch);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CompanyDTO>> Create(CompanyDTO dto)
+        public async Task<IActionResult> Create([FromBody] BranchDTO dto)
         {
             var created = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CompanyDTO>> Update(int id, CompanyDTO dto)
+        public async Task<IActionResult> Update(int id, [FromBody] BranchDTO dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
             if (updated == null) return NotFound();
@@ -47,7 +47,7 @@ namespace RAPID.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _service.DeleteAsync(id);
             if (!deleted) return NotFound();

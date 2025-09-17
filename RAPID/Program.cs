@@ -3,8 +3,6 @@ using RAPID.Automapper;
 using RAPID.Models;
 using RAPID.Services;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,9 +15,9 @@ builder.Services.AddAutoMapper(typeof(CustomerMapper));
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<ITableCountService, TableCountService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
-
-// Add services to the container.
+builder.Services.AddScoped<IBranchService, BranchService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

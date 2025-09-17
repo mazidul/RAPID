@@ -11,6 +11,9 @@ public class Customer : CommonProperty
     public string VatNumber { get; set; }
     public string VendorCode { get; set; }
 
+    public byte? ClientId { get; set; }   // FK
+    public Client Client { get; set; }  // Navigation
+
     public byte? PaymentModeId { get; set; }   // FK
     public PaymentMode PaymentMode { get; set; }  // Navigation
 

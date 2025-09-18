@@ -11,5 +11,4 @@ public class CommonProperty
     public DateTime? UpdatedAt { get; set; }
     public DateTime? Deleted { get; set; }
 
-
 }

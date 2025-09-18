@@ -555,7 +555,6 @@ namespace RAPID.Migrations
                     OpeningStock = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GroupId = table.Column<byte>(type: "tinyint", nullable: true),
                     CategoryId = table.Column<byte>(type: "tinyint", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubCategoryId = table.Column<byte>(type: "tinyint", nullable: true),
                     UnitId = table.Column<byte>(type: "tinyint", nullable: true),
                     BrandId = table.Column<byte>(type: "tinyint", nullable: true),
@@ -578,6 +577,11 @@ namespace RAPID.Migrations
                         name: "FK_Items_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Items_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Items_Colors_ColorId",
@@ -769,6 +773,11 @@ namespace RAPID.Migrations
                 name: "IX_Items_BrandId",
                 table: "Items",
                 column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_CategoryId",
+                table: "Items",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_ColorId",

@@ -1,6 +1,6 @@
 ﻿namespace RAPID.Models;
 
-public class Item : CommonProperty
+public class ItemDTO
 {
     public int Id { get; set; }
     public string ItemCode { get; set; }
@@ -12,23 +12,22 @@ public class Item : CommonProperty
     public decimal OpeningStock { get; set; }
 
     public byte? GroupId { get; set; }
-    public Group Group { get; set; }
+    public string GroupName { get; set; }
 
     public byte? CategoryId { get; set; }
-    public Category Category { get; set; }
-
+    public string CategoryName { get; set; }
 
     public byte? SubCategoryId { get; set; }
-    public SubCategory SubCategory { get; set; }
+    public string SubCategoryName { get; set; }
 
     public byte? UnitId { get; set; }
-    public Unit Unit { get; set; }
+    public string UnitName { get; set; }
 
     public byte? BrandId { get; set; }
-    public Brand Brand { get; set; }
+    public string BrandName { get; set; }
 
     public byte? ColorId { get; set; }
-    public Color Color { get; set; }
+    public string ColorName { get; set; }
 
     public string ItemImageURL { get; set; }
     public string Description { get; set; }

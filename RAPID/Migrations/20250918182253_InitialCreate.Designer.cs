@@ -12,7 +12,7 @@ using RAPID.Models;
 namespace RAPID.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250918154643_InitialCreate")]
+    [Migration("20250918182253_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -885,10 +885,6 @@ namespace RAPID.Migrations
                     b.Property<byte?>("BrandId")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte?>("CategoryId")
                         .HasColumnType("tinyint");
 
@@ -960,6 +956,8 @@ namespace RAPID.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ColorId");
 
@@ -1392,6 +1390,10 @@ namespace RAPID.Migrations
                         .WithMany()
                         .HasForeignKey("BrandId");
 
+                    b.HasOne("RAPID.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("RAPID.Models.Color", "Color")
                         .WithMany()
                         .HasForeignKey("ColorId");
@@ -1409,6 +1411,8 @@ namespace RAPID.Migrations
                         .HasForeignKey("UnitId");
 
                     b.Navigation("Brand");
+
+                    b.Navigation("Category");
 
                     b.Navigation("Color");
 

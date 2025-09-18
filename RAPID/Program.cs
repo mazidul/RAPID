@@ -18,6 +18,15 @@ builder.Services.AddScoped<ITableCountService, TableCountService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
